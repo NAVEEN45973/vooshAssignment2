@@ -28,9 +28,10 @@
 
         function Upload() {
             var array = [];
+            var mobile = [];
             var fileUpload = document.getElementById("fileUpload");
             var x = document.getElementById("dvCSV");
-            //x.style.display = "none";
+            x.style.display = "none";
             var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
             if (regex.test(fileUpload.value.toLowerCase())) {
                 if (typeof (FileReader) != "undefined") {
@@ -50,10 +51,46 @@
                             }
                             if (i > 0) {
                                 array[i - 1] = cells[3] - " ";
+                                mobile[i - 1] = cells[2];
                             }
                             count++;
                         }
                         array.pop();
+                        mobile.pop();
+                        function getDuplicateArrayElements(arr) {
+                            var sorted_arr = arr.slice().sort();
+                            var results = [];
+                            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                                if (sorted_arr[i + 1] === sorted_arr[i]) {
+                                    results.push(sorted_arr[i]);
+                                }
+                            }
+                            return results;
+                        }
+                        function arr_diff(a1, a2) {
+
+                            var a = [], diff = [];
+
+                            for (var i = 0; i < a1.length; i++) {
+                                a[a1[i]] = true;
+                            }
+
+                            for (var i = 0; i < a2.length; i++) {
+                                if (a[a2[i]]) {
+                                    delete a[a2[i]];
+                                } else {
+                                    a[a2[i]] = true;
+                                }
+                            }
+
+                            for (var k in a) {
+                                diff.push(k);
+                            }
+
+                            return diff;
+                        }
+                        const unique = getDuplicateArrayElements(mobile);
+                        document.getElementById("onetime").innerHTML = arr_diff(mobile, unique);
                         const newarray = array.map((i) => Number(i));
 
                         var sum = newarray.reduce(function (a, b) {
@@ -62,6 +99,7 @@
                         document.getElementById("orderstotal").innerHTML = count - 2;
 
                         document.getElementById("amount").innerHTML = sum;
+
 
                         console.log(newarray);
                         var dvCSV = document.getElementById("dvCSV");
