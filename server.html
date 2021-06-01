@@ -28,7 +28,7 @@
 
         function Upload() {
             var array = [];
-            var mobile = [];
+            var onetime = [];
             var fileUpload = document.getElementById("fileUpload");
             var x = document.getElementById("dvCSV");
             x.style.display = "none";
@@ -51,12 +51,12 @@
                             }
                             if (i > 0) {
                                 array[i - 1] = cells[3] - " ";
-                                mobile[i - 1] = cells[2];
+                                onetime[i - 1] = cells[2];
                             }
                             count++;
                         }
                         array.pop();
-                        mobile.pop();
+                        onetime.pop();
                         function getDuplicateArrayElements(arr) {
                             var sorted_arr = arr.slice().sort();
                             var results = [];
@@ -89,8 +89,8 @@
 
                             return diff;
                         }
-                        const unique = getDuplicateArrayElements(mobile);
-                        document.getElementById("onetime").innerHTML = arr_diff(mobile, unique);
+                        const unique = getDuplicateArrayElements(onetime);
+                        document.getElementById("onetime").innerHTML = arr_diff(onetime, unique);
                         const newarray = array.map((i) => Number(i));
 
                         var sum = newarray.reduce(function (a, b) {
