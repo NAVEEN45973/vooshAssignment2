@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <input type="file" id="fileUpload" />
+    <input type="button" id="upload" value="Upload" onclick="Upload()" />
+    <hr />
+    <div id="dvCSV">
+    </div>
+    <div>
+        <h3>1. How many orders did the site receive?</h3>
+        <h2 id="orderstotal"></h2>
+        <h3>2. What was the total amount of the orders?</h3>
+        <h2 id="amount"></h2>
+        <h3>3.List the names of the customers who ordered once and did not order again.</h3>
+        <h2 id="onetime"></h2>
+    </div>
+    <script type="text/javascript">
+
+        function Upload() {
+            var array = [];
+            var fileUpload = document.getElementById("fileUpload");
+            var x = document.getElementById("dvCSV");
+            //x.style.display = "none";
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var table = document.createElement("table");
+                        var count = 0;
+
+                        var rows = e.target.result.split("\n");
+                        for (var i = 0; i < rows.length; i++) {
+                            var row = table.insertRow(-1);
+                            var cells = rows[i].split(", ");
+                            for (var j = 0; j < cells.length; j++) {
+                                var cell = row.insertCell(-1);
+                                cell.innerHTML = cells[j];
+                            }
+                            if (i > 0) {
+                                array[i - 1] = cells[3] - " ";
+                            }
+                            count++;
+                        }
+                        array.pop();
+                        const newarray = array.map((i) => Number(i));
+
+                        var sum = newarray.reduce(function (a, b) {
+                            return a + b;
+                        }, 0);
+                        document.getElementById("orderstotal").innerHTML = count - 2;
+
+                        document.getElementById("amount").innerHTML = sum;
+
+                        console.log(newarray);
+                        var dvCSV = document.getElementById("dvCSV");
+                        dvCSV.innerHTML = "";
+                        dvCSV.appendChild(table);
+                    }
+                    reader.readAsText(fileUpload.files[0]);
+
+                } else {
+                    alert("This browser does not support HTML5.");
+                }
+            } else {
+                alert("Please upload a valid CSV file.");
+            }
+
+
+
+        }
+    </script>
+</body>
+
+</html>
